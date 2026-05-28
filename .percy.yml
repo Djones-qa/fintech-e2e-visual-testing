@@ -1,0 +1,44 @@
+version: 2
+
+snapshot:
+  # Viewport widths to capture for every snapshot
+  widths:
+    - 375
+    - 768
+    - 1280
+    - 1920
+
+  # Minimum height of each snapshot in pixels
+  min-height: 600
+
+  # Enable JavaScript execution during snapshot rendering
+  # Required for React/Vue/Angular SPAs
+  enable-javascript: true
+
+  # Percy-specific CSS injected before snapshotting
+  # Useful for hiding dynamic content (e.g. animations, live prices)
+  percy-css: |
+    /* Disable CSS animations and transitions for deterministic snapshots */
+    *, *::before, *::after {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+
+    /* Hide elements that change on every render */
+    [data-percy-hide="true"] {
+      visibility: hidden !important;
+    }
+
+discovery:
+  # Allowed hostnames for asset discovery
+  allowed-hostnames:
+    - localhost
+    - "*.fintech-demo.com"
+
+  # Network idle timeout (ms) — wait for XHR/fetch to settle
+  network-idle-timeout: 100
+
+  # Disable asset caching during discovery for fresh snapshots
+  disable-cache: false

@@ -1,0 +1,41 @@
+{
+  "name": "fintech-e2e-visual-testing",
+  "version": "1.0.0",
+  "description": "Enterprise-grade E2E visual regression & accessibility testing suite for FinTech applications. Powered by Playwright, Percy, Chromatic, and axe-core. #fintech #playwright #visual-testing #accessibility #a11y #percy #chromatic #cross-browser #qa-automation #e2e-testing",
+  "author": {
+    "name": "Darrius Jones",
+    "url": "https://github.com/darrius-jones"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:a11y": "playwright test --grep @a11y",
+    "test:visual": "playwright test --grep @visual",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "percy:exec": "percy exec -- playwright test --grep @visual",
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
+    "report": "playwright show-report",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "ci": "playwright test --reporter=github,html"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@axe-core/playwright": "^4.9.1",
+    "@percy/cli": "^1.28.8",
+    "@percy/playwright": "^1.0.6",
+    "@playwright/test": "^1.44.1",
+    "axe-core": "^4.9.1",
+    "chromatic": "^11.5.4",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "typescript": "^5.4.5"
+  }
+}
