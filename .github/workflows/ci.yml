@@ -44,13 +44,46 @@ jobs:
       - name: Run TypeScript type-check
         run: npm run typecheck
 
+  # ── Check whether an app URL is configured ───────────────────────────────
+  # Outputs a flag that downstream jobs use to decide whether to run.
+  check-secrets:
+    name: Check secrets
+    runs-on: ubuntu-latest
+    outputs:
+      has-app: ${{ steps.check.outputs.has-app }}
+      has-percy: ${{ steps.check.outputs.has-percy }}
+      has-chromatic: ${{ steps.check.outputs.has-chromatic }}
+    steps:
+      - name: Detect configured secrets
+        id: check
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: |
+          if [ -n "$BASE_URL" ]; then
+            echo "has-app=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-app=false" >> $GITHUB_OUTPUT
+          fi
+          if [ -n "$PERCY_TOKEN" ]; then
+            echo "has-percy=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-percy=false" >> $GITHUB_OUTPUT
+          fi
+          if [ -n "$CHROMATIC_PROJECT_TOKEN" ]; then
+            echo "has-chromatic=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-chromatic=false" >> $GITHUB_OUTPUT
+          fi
+
   # ── Cross-browser E2E Tests ───────────────────────────────────────────────
-  # Only runs when BASE_URL secret is configured (i.e. a real app is deployed).
+  # Only runs when BASE_URL secret is set.
   e2e:
     name: E2E Tests — ${{ matrix.browser }}
     runs-on: ubuntu-latest
-    needs: lint
-    if: ${{ secrets.BASE_URL != '' }}
+    needs: [lint, check-secrets]
+    if: needs.check-secrets.outputs.has-app == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -98,12 +131,12 @@ jobs:
           retention-days: 7
 
   # ── Accessibility Tests ───────────────────────────────────────────────────
-  # Only runs when BASE_URL secret is configured.
+  # Only runs when BASE_URL secret is set.
   a11y:
     name: Accessibility Tests (WCAG 2.1 AA)
     runs-on: ubuntu-latest
-    needs: lint
-    if: ${{ secrets.BASE_URL != '' }}
+    needs: [lint, check-secrets]
+    if: needs.check-secrets.outputs.has-app == 'true'
 
     steps:
       - name: Checkout repository
@@ -139,12 +172,15 @@ jobs:
           retention-days: 30
 
   # ── Percy Visual Tests ────────────────────────────────────────────────────
-  # Only runs when both BASE_URL and PERCY_TOKEN secrets are configured.
+  # Only runs when BASE_URL and PERCY_TOKEN secrets are both set.
   percy:
     name: Percy Visual Regression
     runs-on: ubuntu-latest
-    needs: e2e
-    if: ${{ secrets.BASE_URL != '' && secrets.PERCY_TOKEN != '' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') }}
+    needs: [e2e, check-secrets]
+    if: |
+      needs.check-secrets.outputs.has-app == 'true' &&
+      needs.check-secrets.outputs.has-percy == 'true' &&
+      (github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
 
     steps:
       - name: Checkout repository
@@ -172,12 +208,14 @@ jobs:
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
 
   # ── Chromatic Storybook Visual Tests ─────────────────────────────────────
-  # Only runs when CHROMATIC_PROJECT_TOKEN secret is configured.
+  # Only runs when CHROMATIC_PROJECT_TOKEN secret is set.
   chromatic:
     name: Chromatic — Storybook Visual Review
     runs-on: ubuntu-latest
-    needs: lint
-    if: ${{ secrets.CHROMATIC_PROJECT_TOKEN != '' && (github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') }}
+    needs: [lint, check-secrets]
+    if: |
+      needs.check-secrets.outputs.has-chromatic == 'true' &&
+      (github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
 
     steps:
       - name: Checkout repository
