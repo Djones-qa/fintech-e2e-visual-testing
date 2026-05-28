@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { TransactionsPage } from '../../src/pages/TransactionsPage';
 import { LoginPage } from '../../src/pages/LoginPage';
 import { assertNoA11yViolations, runA11yScan, logA11yReport } from '../../src/helpers/a11y.helper';
@@ -94,7 +94,7 @@ test.describe('Transactions Page @regression', () => {
     await transactionsPage.expectTransactionRow(merchant);
   });
 
-  test('pagination next button should navigate to the next page', async ({ page }) => {
+  test('pagination next button should navigate to the next page', async () => {
     const nextBtn = transactionsPage.paginationNext;
     const isVisible = await nextBtn.isVisible();
     if (isVisible) {

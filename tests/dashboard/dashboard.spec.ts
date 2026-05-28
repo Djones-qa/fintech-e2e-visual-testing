@@ -32,7 +32,7 @@ test.describe('Dashboard Page @smoke @regression', () => {
 
   // ── Functional Tests ────────────────────────────────────────────────────
 
-  test('dashboard should load with the correct heading', async ({ page }) => {
+  test('dashboard should load with the correct heading', async () => {
     await dashboardPage.expectDashboardLoaded();
     await expect(dashboardPage.heading).toBeVisible();
   });

@@ -1,7 +1,5 @@
-import { test } from '@playwright/test';
+import { test, type Page } from '@playwright/test';
 import { LoginPage } from '../../src/pages/LoginPage';
-import { DashboardPage } from '../../src/pages/DashboardPage';
-import { TransactionsPage } from '../../src/pages/TransactionsPage';
 import {
   runA11yScan,
   assertNoA11yViolations,
@@ -43,7 +41,7 @@ test.describe('Accessibility Suite — WCAG 2.1 AA @a11y', () => {
    * Helper: authenticate and navigate to a URL.
    */
   async function authenticateAndGoto(
-    page: Parameters<typeof test>[0]['page'],
+    page: Page,
     url: string
   ): Promise<void> {
     const loginPage = new LoginPage(page);

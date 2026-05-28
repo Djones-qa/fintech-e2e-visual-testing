@@ -1,7 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test, type Page } from '@playwright/test';
 import { LoginPage } from '../../src/pages/LoginPage';
-import { DashboardPage } from '../../src/pages/DashboardPage';
-import { TransactionsPage } from '../../src/pages/TransactionsPage';
 import {
   percySnapshotPage,
   percySnapshotAllWidths,
@@ -27,7 +25,7 @@ test.describe('Visual Regression Suite @visual', () => {
   /**
    * Helper: authenticate and return to the given URL.
    */
-  async function authenticateAndGoto(page: Parameters<typeof test>[0]['page'], url: string) {
+  async function authenticateAndGoto(page: Page, url: string) {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(VALID_CREDENTIALS.email, VALID_CREDENTIALS.password);
