@@ -2,7 +2,7 @@
 
 > Enterprise-grade E2E visual regression & accessibility testing suite for FinTech applications.
 
-[![CI](https://github.com/darrius-jones/fintech-e2e-visual-testing/actions/workflows/ci.yml/badge.svg)](https://github.com/darrius-jones/fintech-e2e-visual-testing/actions/workflows/ci.yml)
+[![CI](https://github.com/Djones-qa/fintech-e2e-visual-testing/actions/workflows/ci.yml/badge.svg)](https://github.com/Djones-qa/fintech-e2e-visual-testing/actions/workflows/ci.yml)
 [![Percy](https://percy.io/static/images/percy-badge.svg)](https://percy.io)
 [![Chromatic](https://img.shields.io/badge/chromatic-visual--review-fc521f?logo=storybook&logoColor=white)](https://www.chromatic.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -134,7 +134,7 @@ fintech-e2e-visual-testing/
 ### Install
 
 ```bash
-git clone https://github.com/darrius-jones/fintech-e2e-visual-testing.git
+git clone https://github.com/Djones-qa/fintech-e2e-visual-testing.git
 cd fintech-e2e-visual-testing
 npm install
 ```
@@ -407,7 +407,7 @@ Please keep PRs focused. One feature or fix per PR.
 
 **Darrius Jones**
 
-- GitHub: [darrius-jones](https://github.com/darrius-jones)
+- GitHub: [Djones-qa](https://github.com/Djones-qa)
 - LinkedIn: [darrius-jones-28226b350](https://www.linkedin.com/in/darrius-jones-28226b350/)
 
 ---
